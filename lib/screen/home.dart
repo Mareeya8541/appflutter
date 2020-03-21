@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:miniappflutter/screen/firstPage.dart';
+import 'package:miniappflutter/screen/registorPage.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 
 class Home extends StatefulWidget {
   @override
@@ -14,7 +18,7 @@ class _HomeState extends State<Home> {
   Widget showText(){
     return Container(
       child: Text(
-        'Welcom ',
+        'Welcome',
          style: TextStyle(
            fontSize:50.0,
            color:Colors.deepOrange,
@@ -38,6 +42,12 @@ class _HomeState extends State<Home> {
           labelText: 'Username',
           hintText: 'your@email.com'
         ),
+        style: TextStyle(
+          fontSize:18.0,
+           //color:Colors.deepOrange,
+           fontWeight:FontWeight.bold,
+           fontFamily: 'Righteous-Regular'
+        ),
       ),
     );
   }
@@ -55,7 +65,12 @@ class _HomeState extends State<Home> {
           ),
           labelText: 'Password',
           hintText: 'more 8 charactor'
-        
+        ),
+        style: TextStyle(
+          fontSize:18.0,
+           //color:Colors.deepOrange,
+           fontWeight:FontWeight.bold,
+           fontFamily: 'Righteous-Regular'
         ),
       ),
     );
@@ -75,10 +90,10 @@ class _HomeState extends State<Home> {
            fontFamily: 'Righteous-Regular'
       ),),
       onPressed: (){
-        // var route = MaterialPageRoute(
-        //     builder: (BuildContext context) => SecondPage()
-        //   );
-        //   Navigator.of(context).push(route);
+        var route = MaterialPageRoute(
+            builder: (BuildContext context) => FirstPage()
+          );
+          Navigator.of(context).push(route);
       },
     ),
     );
@@ -98,14 +113,15 @@ class _HomeState extends State<Home> {
            fontFamily: 'Righteous-Regular'
       ),),
       onPressed: (){
-        // var route = MaterialPageRoute(
-        //     builder: (BuildContext context) => RigisPage()
-        //   );
-        //   Navigator.of(context).push(route);
+        var route = MaterialPageRoute(
+            builder: (BuildContext context) => RegistorPage()
+          );
+          Navigator.of(context).push(route);
       },
     ),
     );
   }
+
    Widget blocklogin(){
     return Container(
       decoration: BoxDecoration(
@@ -113,6 +129,7 @@ class _HomeState extends State<Home> {
                       gradient: LinearGradient(
                           colors: [Colors.lightBlue[400], Colors.tealAccent[400]])),
         child: Container(
+          width: 350.0,
           padding: EdgeInsets.all(16.0),
             child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -123,6 +140,7 @@ class _HomeState extends State<Home> {
             
     );
   }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold (
