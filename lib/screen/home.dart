@@ -77,7 +77,8 @@ class _HomeState extends State<Home> {
   }
   Widget buttonlogin(){
     return Container(
-      width: 300.0,
+      width: 150.0,
+      height: 50.0,
       child: RaisedButton.icon(
         color: Colors.deepOrangeAccent,
         icon: Icon(Icons.account_circle ,
@@ -100,7 +101,8 @@ class _HomeState extends State<Home> {
   }
   Widget buttonrigis(){
     return Container(
-      width: 300.0,
+      width: 150.0,
+      height: 50.0,
       child: RaisedButton.icon(
         color: Colors.deepOrangeAccent,
         icon: Icon(Icons.person_add,
@@ -133,11 +135,20 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.all(16.0),
             child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[showText(),emailText(),passText(),buttonlogin(),
-              buttonrigis()],
+            children: <Widget>[showText(),emailText(),passText(),Text('\n'),button()],
           ),
           ),
             
+    );
+  }
+
+  Widget button(){
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        buttonlogin(),Text('  '),
+        buttonrigis()
+      ],
     );
   }
   
