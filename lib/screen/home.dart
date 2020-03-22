@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
   Widget showText(){
     return Container(
       child: Text(
-        'Welcome',
+        'Battery Charger',
          style: TextStyle(
            fontSize:50.0,
            color:Colors.deepOrange,
@@ -131,7 +131,7 @@ class _HomeState extends State<Home> {
                       gradient: LinearGradient(
                           colors: [Colors.lightBlue[400], Colors.tealAccent[400]])),
         child: Container(
-          width: 350.0,
+          width: 450.0,
           padding: EdgeInsets.all(16.0),
             child: Column(
             mainAxisSize: MainAxisSize.min,
