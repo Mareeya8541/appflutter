@@ -9,9 +9,10 @@ class FirstPage extends StatefulWidget {
 
 class _FirstPageState extends State<FirstPage> {
   IotModel iotModel;
-  int a=1,door1Int,fiveminute,tenminute,creditint,fifteenminute,twentyminute;
-  String door1,credit1="Please to Refresh",fivemin="5 Baht \n10 minutes",tenmin="10 Baht \n20 minutes",fifteenmin="15 Baht \n30 minutes",
-  twentymin="20 Baht \n60 minutes";
+  int a=1,door1Int,fiveminute,tenminute,creditint,fifteenminute,twentyminute,pushbutton;
+  String door1,credit1="Please to Refresh",fivemin="5 Baht \n5 minutes",tenmin="10 Baht \n10 minutes",fifteenmin="15 Baht \n15 minutes",
+  twentymin="20 Baht \n20 minutes";
+  String user="",pass="";
 
   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
@@ -30,6 +31,9 @@ class _FirstPageState extends State<FirstPage> {
       print('data=>${dataSnapshot.value.toString()}');//ทุกอย่างใน document ถูกอ่านหมดเลย
       iotModel=IotModel.formMap(dataSnapshot.value);
       credit1=iotModel.credit1;
+      pushbutton=iotModel.pushbutton;
+      user=iotModel.user;
+      pass=iotModel.pass;
     });
    
   }
@@ -40,13 +44,14 @@ class _FirstPageState extends State<FirstPage> {
     DatabaseReference databaseReference = firebaseDatabase.reference().child('bc');
      Map<dynamic,dynamic> map = Map();
      map['credit']=credit1;
+     map['pushbutton']=pushbutton;
+     map['user']=user;
+     map['pass']=pass;
      await databaseReference.set(map).then((response){
        print('Edit Success');
      });
   
   }
-
-  
 
   Widget showcredit(){
   
@@ -65,6 +70,7 @@ class _FirstPageState extends State<FirstPage> {
       ],
     );
   }
+  
     Widget buttonlogin(){
     return Container(
       width: 150.0,
@@ -146,20 +152,29 @@ class _FirstPageState extends State<FirstPage> {
                // fivemin="5 Baht \n10 minutes";
                 //credit1=iotModel.credit1;
                 readData();
-                creditint =int.parse(credit1);
-                credit1=(creditint-5).toString();
+                creditint =int.parse(credit1)-5;
+                if(creditint<0){
+                  creditint=0;
+                }
+                credit1=(creditint).toString();
+                pushbutton=5;
               }
               else {
                fiveminute=0;
                //fivemin="5 Baht \n10 minutes";
                 //credit1=iotModel.credit1;
                 readData();
-                creditint =int.parse(credit1);
-                credit1=(creditint-5).toString();
+                creditint =int.parse(credit1)-5;
+                if(creditint<0){
+                  creditint=0;
+                }
+                credit1=(creditint).toString();
+                pushbutton=5;
+
               }
               print('$fiveminute');
               editDatabase();
-             // readData();
+              readData();
              
             });
           },
@@ -194,16 +209,24 @@ class _FirstPageState extends State<FirstPage> {
                // fivemin="5 Baht \n10 minutes";
                // credit1=iotModel.credit1;
                 readData();
-                creditint =int.parse(credit1);
-                credit1=(creditint-10).toString();
+                creditint =int.parse(credit1)-10;
+                if(creditint<0){
+                  creditint=0;
+                }
+                credit1=(creditint).toString();
+                pushbutton=10;
               }
               else {
                tenminute=0;
                //fivemin="5 Baht \n10 minutes";
                 //credit1=iotModel.credit1;
                 readData();
-                creditint =int.parse(credit1);
-                credit1=(creditint-10).toString();
+                creditint =int.parse(credit1)-10;
+                if(creditint<0){
+                  creditint=0;
+                }
+                credit1=(creditint).toString();
+                pushbutton=10;
               }
               print('$tenminute');
               editDatabase();
@@ -252,16 +275,24 @@ class _FirstPageState extends State<FirstPage> {
                // fivemin="5 Baht \n10 minutes";
                // credit1=iotModel.credit1;
                 readData();
-                creditint =int.parse(credit1);
-                credit1=(creditint-15).toString();
+                creditint =int.parse(credit1)-15;
+                if(creditint<0){
+                  creditint=0;
+                }
+                credit1=(creditint).toString();
+                pushbutton=15;
               }
               else {
                fifteenminute=0;
                //fivemin="5 Baht \n10 minutes";
                 //credit1=iotModel.credit1;
                 readData();
-                creditint =int.parse(credit1);
-                credit1=(creditint-15).toString();
+                creditint =int.parse(credit1)-15;
+                if(creditint<0){
+                  creditint=0;
+                }
+                credit1=(creditint).toString();
+                pushbutton=15;
               }
               print('$fifteenminute');
               editDatabase();
@@ -300,16 +331,24 @@ class _FirstPageState extends State<FirstPage> {
                // fivemin="5 Baht \n10 minutes";
                // credit1=iotModel.credit1;
                 readData();
-                creditint =int.parse(credit1);
-                credit1=(creditint-20).toString();
+                creditint =int.parse(credit1)-20;
+                if(creditint<0){
+                  creditint=0;
+                }
+                credit1=(creditint).toString();
+                pushbutton=20;
               }
               else {
                twentyminute=0;
                //fivemin="5 Baht \n10 minutes";
                 //credit1=iotModel.credit1;
                 readData();
-                creditint =int.parse(credit1);
-                credit1=(creditint-20).toString();
+                creditint =int.parse(credit1)-20;
+                if(creditint<0){
+                  creditint=0;
+                }
+                credit1=(creditint).toString();
+                pushbutton=20;
               }
               print('$twentyminute');
               editDatabase();

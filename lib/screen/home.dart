@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:miniappflutter/screen/firstPage.dart';
-import 'package:miniappflutter/screen/registorPage.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'dart:convert';
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart' as crypto;
+import 'package:miniappflutter/screen/iot_model.dart';
 
 
 class Home extends StatefulWidget {
@@ -10,6 +13,46 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+   IotModel iotModel;
+   var myemail = new TextEditingController();
+  var mypass = new TextEditingController();
+  String user="",pass="",credit1;
+  int pushbutton;
+ FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+
+ void initState() {
+    super.initState();
+    readData();
+    
+  }
+
+   Future <void> readData() async {
+    print('Read Data Work');
+    DatabaseReference databaseReference = firebaseDatabase.reference().child('bc');
+    await databaseReference.once().then((DataSnapshot dataSnapshot){
+      print('data=>${dataSnapshot.value.toString()}');//ทุกอย่างใน document ถูกอ่านหมดเลย
+      iotModel=IotModel.formMap(dataSnapshot.value);
+      user=iotModel.user;
+      pass=iotModel.pass;
+      credit1=iotModel.credit1;
+      pushbutton=iotModel.pushbutton;
+    });
+   
+  }
+
+  Future<void> editDatabase() async{//โยนค่าขึ้น firebase
+    FirebaseDatabase firebaseDatabase= FirebaseDatabase.instance;
+    DatabaseReference databaseReference = firebaseDatabase.reference().child('bc');
+     Map<dynamic,dynamic> map = Map();
+     map['user']=user;
+     map['pass']=pass;
+     map['credit']=credit1;
+     map['pushbutton']=pushbutton;
+     await databaseReference.set(map).then((response){
+       print('Edit Success');
+     });
+  
+  }
 
    Widget showlogo(){
     return Image.asset('images/money.png',width: 200,);
@@ -33,7 +76,7 @@ class _HomeState extends State<Home> {
     return Container(
       width: 300.0,
       child: TextFormField(
-        //controller: textEditController,
+        controller: myemail,
         decoration: InputDecoration(
           icon: Icon(Icons.people,
           size: 30.0,
@@ -57,7 +100,7 @@ class _HomeState extends State<Home> {
       width: 300.0,
       child: TextFormField(
         obscureText: true,
-        //controller: textEditController1,
+        controller: mypass,
         decoration: InputDecoration(
           icon: Icon(Icons.vpn_key,
           size : 30.0,
@@ -75,13 +118,46 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+   generateMd5(String data) {
+  var content = new Utf8Encoder().convert(data);
+  var md5 = crypto.md5;
+  var digest = md5.convert(content);
+  return hex.encode(digest.bytes);
+ }
+
+  // Widget buttonlogin(){
+  //   return Container(
+  //     width: 150.0,
+  //     height: 50.0,
+  //     child: RaisedButton.icon(
+  //       color: Colors.deepOrangeAccent,
+  //       icon: Icon(Icons.account_circle ,
+  //       size: 30.0,
+  //     ),
+  //     label: Text('LOGIN',style: TextStyle(
+  //          fontSize:15.0,
+  //          color:Colors.black,
+  //          fontWeight:FontWeight.bold,
+  //          fontFamily: 'Righteous-Regular'
+  //     ),),
+  //     onPressed: (){
+  //       var route = MaterialPageRoute(
+  //           builder: (BuildContext context) => FirstPage()
+  //         );
+  //         Navigator.of(context).push(route);
+  //     },
+  //   ),
+  //   );
+  // }
   Widget buttonlogin(){
+    readData();
     return Container(
-      width: 150.0,
+      width: 300.0,
       height: 50.0,
       child: RaisedButton.icon(
         color: Colors.deepOrangeAccent,
-        icon: Icon(Icons.account_circle ,
+        icon: Icon(Icons.account_circle,
         size: 30.0,
       ),
       label: Text('LOGIN',style: TextStyle(
@@ -90,36 +166,16 @@ class _HomeState extends State<Home> {
            fontWeight:FontWeight.bold,
            fontFamily: 'Righteous-Regular'
       ),),
-      onPressed: (){
+      onPressed: (){if(generateMd5(mypass.text)==pass&&myemail.text==user){
         var route = MaterialPageRoute(
-            builder: (BuildContext context) => FirstPage()
+            builder: (BuildContext context) => FirstPage(
+              // valueFromRigisPage: myemail.text,
+              // valueFromRigisPage1: generateMd5(mypass.text),
+
+            )
           );
           Navigator.of(context).push(route);
-      },
-    ),
-    );
-  }
-  Widget buttonrigis(){
-    return Container(
-      width: 150.0,
-      height: 50.0,
-      child: RaisedButton.icon(
-        color: Colors.deepOrangeAccent,
-        icon: Icon(Icons.person_add,
-        size: 30.0,
-      ),
-      label: Text('RIGISTOR',style: TextStyle(
-           fontSize:15.0,
-           color:Colors.black,
-           fontWeight:FontWeight.bold,
-           fontFamily: 'Righteous-Regular'
-      ),),
-      onPressed: (){
-        var route = MaterialPageRoute(
-            builder: (BuildContext context) => RegistorPage()
-          );
-          Navigator.of(context).push(route);
-      },
+      }editDatabase();},
     ),
     );
   }
@@ -135,22 +191,22 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.all(16.0),
             child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[showText(),emailText(),passText(),Text('\n'),button()],
+            children: <Widget>[showText(),emailText(),passText(),Text('\n'),buttonlogin()],
           ),
           ),
             
     );
   }
 
-  Widget button(){
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        buttonlogin(),Text('  '),
-        buttonrigis()
-      ],
-    );
-  }
+  // Widget button(){
+  //   return Row(
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: <Widget>[
+  //       buttonlogin(),Text('  '),
+  //       buttonrigis()
+  //     ],
+  //   );
+  // }
   
   @override
   Widget build(BuildContext context) {
@@ -162,7 +218,7 @@ class _HomeState extends State<Home> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               showlogo(),
-              blocklogin()
+              blocklogin(),
             ],
           ),),
         ),

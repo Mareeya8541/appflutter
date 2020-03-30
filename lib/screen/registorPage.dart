@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:miniappflutter/screen/home.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 
 class RegistorPage extends StatefulWidget {
   @override
